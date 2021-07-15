@@ -42,8 +42,9 @@ if( !isset($uri[1]) || !in_array($uri[1], $endpoints) || isset($uri[2]) ) {
 }
 
 // we import some required classes
-use App\Controllers\MatrixController;
-use App\Classes\Validator;
+use App\CSV;
+use App\Validator;
+use App\Matrix;
 
 // validate file before passing to controller, lets consider this block a middleware
 // for validation error status code, we will return 422 UNPROCESSABLE ENTITY
@@ -54,6 +55,8 @@ if( !isset($_FILES['file']) || !Validator::isCSV($_FILES['file']) ){
 }
 
 //@todo check if CSV contains a matrix
+$csv = new CSV($_FILES['file']);
+var_dump($csv);
 
 
 // use Matrix controller to handle matrix related requests

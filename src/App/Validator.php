@@ -2,7 +2,7 @@
 /**
  * This class is used for most common validation
  */
-namespace App\Classes;
+namespace App;
 
 class Validator {
 
@@ -38,9 +38,10 @@ class Validator {
      */
     public static function hasValidMatrix(array $file) {
 
-        if(!self::isCSV($file)) return false;
+        if( !self::isCSV($file) ) return false;
         
-        $filepath = $_FILES['myFile']['tmp_name'];
-        $fileSize = filesize($filepath);
+        if( !self::CSVIsEmpty($file) ) return false;
+
+        
     }
 }

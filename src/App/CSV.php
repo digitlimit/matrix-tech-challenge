@@ -1,7 +1,9 @@
 <?php
+namespace App;
 
-namespace App\Classes;
-
+/**
+ * This class is a helper class for interacting with a CSV file
+ */
 class CSV {
 
     protected array $matrix = array();
