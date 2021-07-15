@@ -26,7 +26,7 @@ header("Access-Control-Allow-Methods: OPTIONS,GET,POST,PUT,DELETE");
 header("Access-Control-Max-Age: 3600");
 header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
 
-// Read URL for incoming request
+// read URL for incoming request
 $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 $uri = explode( '/', $uri );
 
@@ -41,21 +41,30 @@ if( !isset($uri[1]) || !in_array($uri[1], $endpoints) || isset($uri[2]) ) {
     die;
 }
 
+// we import some required classes
+use App\Controllers\MatrixController;
+use App\Classes\Validator;
+
 // validate file before passing to controller, lets consider this block a middleware
 // for validation error status code, we will return 422 UNPROCESSABLE ENTITY
-if(!isset($_FILES['file'])){
+if( !isset($_FILES['file']) || !Validator::isCSV($_FILES['file']) ){
     header("HTTP/1.1 422 Unprocessable Entity");
-    echo json_encode([ 'message' => 'CSV file required', 'success' => false ]);
+    echo json_encode([ 'message' => 'A valid CSV file is required', 'success' => false ]);
     die;
 }
 
+//@todo check if CSV contains a matrix
+
+
 // use Matrix controller to handle matrix related requests
-use App\Controllers\MatrixController;
+// use App\Controllers\MatrixController;
 
-$matrixController = new MatrixController();
+// $matrixController = new MatrixController();
 //array(), array("three", "four")
-call_user_func_array([ $matrixController, $uri[1], [
+// call_user_func_array([ $matrixController, $uri[1], [
 
-]]);
+// ]]);
 
-var_dump($_POST['file']); die;
+echo 69;
+
+var_dump($_FILES['file']); die;
