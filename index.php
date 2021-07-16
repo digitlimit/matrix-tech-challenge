@@ -72,6 +72,7 @@ if( !isset($_FILES['file'])
 }
 
 // check CSV is valid 
+// check if matrix contains only integers
 $csv = new CSV($_FILES['file']);
 if( !$csv->isValidMatrix() ){
     header("HTTP/1.1 422 Unprocessable Entity");
@@ -84,6 +85,16 @@ if( !$csv->isValidMatrix() ){
 
 // this will fetch matrix array
 $matrix = new Matrix( $csv->getMatrix() );
+
+// check if matrix contains only integers
+if( !$matrix->containsOnlyInteger() ){
+    header("HTTP/1.1 422 Unprocessable Entity");
+    echo json_encode([ 
+        'message' => 'Matrix in the CSV should only contain integers', 
+        'success' => false 
+    ]);
+    die;
+}
 
 // we call a function inside the matrix class
 // $uri[1] is one of 'echo', 'invert', 'flatten', 'sum', 'multiply'

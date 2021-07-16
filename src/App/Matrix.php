@@ -134,15 +134,17 @@ class Matrix {
     protected function sumMatrix($data, $sum = 0) : int {
 
         foreach($data as $value) {
-    
-            if( is_array($value) ) {
+
+            // if(!is_array($value)) print_r(strval($value));
+            
+            if( is_array($value) ) { 
                 // sum sub array
                 $sum = $this->sumMatrix($value, $sum);
-            }else if(is_int($value)) {
+            }else if( ctype_digit(strval($value)) ) {
                 $sum += $value;
             }
         }
-    
+ 
         return $sum;
     }
 
@@ -160,11 +162,36 @@ class Matrix {
             if( is_array($value) ) {
                 // sum sub array
                 $sum = $this->multiplyMatrix($value, $sum);
-            }else if(is_int($value)) {
+            }else if( ctype_digit(strval($value)) ) {
                 $sum *= $value;
             }
         }
     
         return $sum;
+    }
+
+    /**
+     * ontainsOnlyInteger
+     * Check if matrix has only integers
+     */
+    public function containsOnlyInteger() : bool {
+
+        $valid = true;
+
+        foreach($this->matrix as $row)
+        {
+            // we are checking if there is non integer in the matrix
+            foreach($row as $value) {
+
+               if( !ctype_digit(strval($value)) ) { 
+                    $valid = false;
+                    break;
+               }
+            }
+
+            if(!$valid) break;
+        }
+
+        return $valid;
     }
 }

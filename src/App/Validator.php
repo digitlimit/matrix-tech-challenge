@@ -47,7 +47,8 @@ class Validator {
     }
 
     /**
-     * 
+     * CSVISEmpty
+     * Check if csv is empty
      */
     public static function CSVIsEmpty(array $file) {
 
@@ -55,17 +56,5 @@ class Validator {
         $path = $file['tmp_name'];
 
         return filesize($path) === 0;
-    }
-
-    /**
-     * 
-     */
-    public static function hasValidMatrix(array $file) {
-
-        if( !self::isCSV($file) ) return false;
-        
-        if( !self::CSVIsEmpty($file) ) return false;
-
-        
     }
 }
