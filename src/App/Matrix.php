@@ -1,5 +1,6 @@
 <?php
-namespace App;
+
+namespace League\App;
 
 /**
  * This class is a reusable helper class for manipulating matrix
@@ -108,12 +109,19 @@ class Matrix {
     }
 
     /**
-     * Magic method that prints string
-     * 
+     * getResult
+     * Return a result from the matrix operation
      */
-    public function __toString() : void {
-        header("Content-Type: text/plain");
-        echo $this->result;
+    public function getResult() : string {
+        return $this->result;
+    }
+
+    /**
+     * Magic method that returns string if object is treated 
+     * as a string. 
+     */
+    public function __toString() : string {
+        return $this->getResult();
     }
 
     /**
