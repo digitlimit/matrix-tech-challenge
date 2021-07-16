@@ -8,11 +8,13 @@
  * ----------------------------------------------------------------
  */
 
+// show all PHP errors
+error_reporting(-1);
+
 /**
  * This loads composer autoload file to enable us use namespacing
  */
 require './vendor/autoload.php';
-
 
 /**
  * Here is a simple PHP REST API to handle requests
@@ -42,32 +44,50 @@ if( !isset($uri[1]) || !in_array($uri[1], $endpoints) || isset($uri[2]) ) {
 }
 
 // we import some required classes
-use App\CSV;
-use App\Validator;
-use App\Matrix;
+use League\App\CSV;
+use League\App\Validator;
+use League\App\Matrix;
 
 // validate file before passing to controller, lets consider this block a middleware
 // for validation error status code, we will return 422 UNPROCESSABLE ENTITY
-if( !isset($_FILES['file']) || !Validator::isCSV($_FILES['file']) ){
+if( !isset($_FILES['file']) 
+    || ($_FILES['file']['size'] == 0 && $_FILES['file']['error'] == 0) ){
+    
+    // set header
     header("HTTP/1.1 422 Unprocessable Entity");
-    echo json_encode([ 'message' => 'A valid CSV file is required', 'success' => false ]);
+
+    // print error
+    echo json_encode([ 
+        'message' => 'A valid CSV file is required', 
+        'success' => false 
+    ]);
+    die;
+}elseif( !Validator::isCSV($_FILES['file']) ){
+    header("HTTP/1.1 422 Unprocessable Entity");
+    echo json_encode([ 
+        'message' => 'CSV file is invalid', 
+        'success' => false 
+    ]);
     die;
 }
 
-//@todo check if CSV contains a matrix
+// check CSV is valid 
 $csv = new CSV($_FILES['file']);
-var_dump($csv);
+if( !$csv->isValidMatrix() ){
+    header("HTTP/1.1 422 Unprocessable Entity");
+    echo json_encode([ 
+        'message' => 'CSV does not contain valid matrix', 
+        'success' => false 
+    ]);
+    die;
+}
 
+// this will fetch matrix array
+$matrix = new Matrix( $csv->getMatrix() );
 
-// use Matrix controller to handle matrix related requests
-// use App\Controllers\MatrixController;
-
-// $matrixController = new MatrixController();
-//array(), array("three", "four")
-// call_user_func_array([ $matrixController, $uri[1], [
-
-// ]]);
-
-echo 69;
-
-var_dump($_FILES['file']); die;
+// we call a function inside the matrix class
+// $uri[1] is one of 'echo', 'invert', 'flatten', 'sum', 'multiply'
+// which are methods in the Matrix class
+header("Content-Type: text/plain");
+echo call_user_func_array([$matrix, $uri[1]], []);
+die;
