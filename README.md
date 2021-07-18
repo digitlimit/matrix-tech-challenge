@@ -47,16 +47,6 @@ Given an uploaded csv file
 
 The input file to these functions is a matrix, of any dimension where the number of rows are equal to the number of columns (square). Each value is an integer, and there is no header row. matrix.csv is example valid input.  
 
-Run web server
-```
-go run .
-```
-
-Send request
-```
-curl -F 'file=@/path/matrix.csv' "localhost:8080/echo"
-```
-
 # Instruction:
 
 1. Extract the project 
