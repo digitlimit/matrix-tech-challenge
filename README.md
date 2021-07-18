@@ -56,3 +56,18 @@ Send request
 ```
 curl -F 'file=@/path/matrix.csv' "localhost:8080/echo"
 ```
+
+# Instruction:
+
+1. Extract the project 
+2. Go to the root of the project and run `composer install`
+3. Start PHP Server by running `php -S localhost:8080`
+4. Run PHPUnit test `./vendor/bin/phpunit`
+
+You can test the application using postman, curl etc
+
+curl -F 'file=@matrix.csv' "localhost:8080/echo"
+curl -F 'file=@matrix.csv' "localhost:8080/invert"
+curl -F 'file=@matrix.csv' "localhost:8080/flatten"
+curl -F 'file=@matrix.csv' "localhost:8080/sum"
+curl -F 'file=@matrix.csv' "localhost:8080/multiply"
